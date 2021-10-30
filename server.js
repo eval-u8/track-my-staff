@@ -111,7 +111,7 @@ const viewAllRoles = () => {
 
     db.query(sql, (err, rows) => {
         if (err) throw error;
-        console.log('Departments');
+        console.log('Roles');
         console.table(rows);
         promptAction();
     });
