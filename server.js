@@ -1,6 +1,7 @@
 const db = require('./db/connection');
 const figlet = require('figlet');
 const inquirer = require('inquirer');
+const { listenerCount } = require('./db/connection');
 // const cTable = require('console.table');
 
 //welcome figlet
@@ -311,3 +312,60 @@ const addEmployee = () => {
 });
 };
 
+//update employee fn
+const updateEmployeeRole = () => {
+    const sqlEmployees = `SELECT * FROM employees`;
+
+    db.query(sqlEmployees, (err, rows) => {
+
+    const employees = rows.map(({ id, first_name, last_name }) => ({name: first_name + " " + last_name, value: id}));
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'employeeName',
+                message: "Which employee would you like to update?",
+                choices: employees
+            }
+        ])
+        .then(employeeChoice => {
+            const employeeString = employeeChoice.employeeName;
+            const employeeArray = [];
+            employeeArray.push(employeeString);
+            const sqlRole = `SELECT * FROM roles`;
+
+            db.query(sqlRole, (err, rows) => {
+                if(err)throw error;
+                const rolesList = rows.map(({id, title}) => ({name:title, value:id}));
+                console.log(rolesList);
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name:'employeeRole',
+                        message: "What is the employee's new role?",
+                        choices: rolesList
+                    }
+                ]).then(answer => {
+                    console.log(answer);
+                    const role = answer.employeeRole;
+
+                    employeeArray.push(role);
+
+                    let employee = employeeArray[0];
+                    employeeArray[0] = role;
+                    employeeArray[1] = employee;
+
+
+                    const sql = `UPDATE employees SET role_id = ? WHERE id = ?`;
+
+                    db.query(sql, employeeArray, (err, rowss) =>{
+                        if(err)throw error;
+                        console.log("The employee has been updated.");
+
+                        promptAction();
+                    });
+                });
+            });
+        });
+    });
+}
