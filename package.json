@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.2"
+  },
+  "name": "track-my-staff",
+  "description": "An employee tracker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "jest": "^27.3.1"
+  },
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evalecillos/track-my-staff.git"
+  },
+  "author": "Ernesto.V",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/evalecillos/track-my-staff/issues"
+  },
+  "homepage": "https://github.com/evalecillos/track-my-staff#readme"
+}
