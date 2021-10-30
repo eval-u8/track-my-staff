@@ -169,3 +169,145 @@ const addDepartment = () => {
         })
     });
 };
+
+//add role
+const addRole = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name : 'newRole',
+            message: "Enter the role's name: ",
+            validate: (text) => {
+                if (text) {
+                    return true;
+                } else {
+                    console.log('Please enter the name of the new role to proceed.');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name : 'salary',
+            message: 'Enter salary for this role: ',
+            validate: (number) => {
+                if (number){
+                    return true;
+                } else {
+                    console.log('Please enter a salary for this new role to proceed.');
+                    return false;
+                }
+            }
+        }]).then(answer => {
+            const addRoleArray = [answer.newRole, answer.salary];
+            const sqlRole = `SELECT department_name, id FROM departments`;
+
+            db.query(sqlRole, (err, data) => {
+                if (err)throw error;
+                const departments = data.map(({department_name, id}) => ({name:department_name, value:id}));
+            inquirer.prompt([
+                {
+                    type: 'list', 
+                    name: 'department',
+                    message: "What department is this role going to be in?",
+                    choices: departments
+            }
+        ]).then(departmentChoice => {
+                const department = departmentChoice.department;
+                addRoleArray.push(department);
+
+                const sql = `INSERT INTO roles (title, salary, department_id)
+                VALUES (?, ?, ?)`;
+
+                db.query(sql, addRoleArray, (err, rows) => {
+                    if(err)throw error;
+                    console.log(`${answer.newRole} was succesfully added to the roles table!`);
+                    promptAction();
+                })
+            })  
+        })
+    })};
+
+    //add employee
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name : 'firstName',
+            message: "Enter the employee's first name: ",
+            validate: (text) => {
+                if (text) {
+                    return true;
+                } else {
+                    console.log('Please enter the first name to proceed.');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name : 'lastName',
+            message: "Enter the employee's last name: ",
+            validate: (text) => {
+                if (text) {
+                    return true;
+                } else {
+                    console.log('Please enter the last name to proceed.');
+                    return false;
+                }
+            }
+        }
+    ]).then(answer => {
+            const addEmployeeArray = [answer.firstName, answer.lastName];
+            const sqlRole = `SELECT roles.id, title FROM roles`;
+
+            db.query(sqlRole, (err, data) => {
+                if (err)throw error;
+                const roles = data.map(({title, id}) => ({name:title, value:id}));
+            inquirer.prompt([
+                {
+                    type: 'list', 
+                    name: 'employeeRole',
+                    message: "What will be the employee's role?",
+                    choices: roles
+            }
+        ]).then(roleChoice => {
+                const role = roleChoice.employeeRole;
+                addEmployeeArray.push(role);
+
+                const sqlManager = `SELECT * FROM employees`;
+
+                db.query(sqlManager, (err, data) => {
+                if (err) throw err;
+
+                const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+
+                console.log(managers);
+
+                inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'manager',
+                    message: "Who will be the employee's manager?",
+                    choices: managers
+                }
+                ])
+                .then(managerChoice => {
+                    const manager = managerChoice.manager;
+                    addEmployeeArray.push(manager);
+
+                const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+                VALUES (?, ?, ?, ?)`;
+
+                db.query(sql, addEmployeeArray, (err, rows) => {
+                    if(err)throw error;
+                    console.log(`Employee was succesfully added to the table!`);
+                    promptAction();
+                });
+            });
+        })
+    });
+});
+});
+};
+
