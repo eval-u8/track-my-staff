@@ -494,35 +494,37 @@ const updateEmployeeManager = () => {
 //don't know what they mean by sort by dpt or manager so won't do it.
 
 //delete department fn
-const deleteDepartment = () =>{
+const deleteDepartment = () => {
     const sqlDepartment = `SELECT * FROM departments`;
 
     db.query(sqlDepartment, (err, rows) => {
-        if(err)throw error;
+        if (err) throw error;
 
         const departmentArr = rows.map(({ department_name, id }) => ({
             name: department_name,
             value: id,
         }));
-        inquirer.prompt([
-            {
-                type: 'list',
-                name: 'department',
-                message: "Which department would you like to delete?",
-                choices: departmentArr
-            }
-        ]).then(answer => {
-            const department = answer.department;
-            const sql = `DELETE FROM departments WHERE id = ?`;
+        inquirer
+            .prompt([
+                {
+                    type: "list",
+                    name: "department",
+                    message: "Which department would you like to delete?",
+                    choices: departmentArr,
+                },
+            ])
+            .then((answer) => {
+                const department = answer.department;
+                const sql = `DELETE FROM departments WHERE id = ?`;
 
-            db.query(sql, department, (err, rows) => {
-                if(err)throw err;
-                console.log("The department was deleted succesfully.");
-                promptAction();
-            })
-        })
-    })
-}
+                db.query(sql, department, (err, rows) => {
+                    if (err) throw err;
+                    console.log("The department was deleted succesfully.");
+                    promptAction();
+                });
+            });
+    });
+};
 //delete role fn
 const deleteRole = () => {
     const sqlRole = `SELECT * FROM roles`;
@@ -556,6 +558,49 @@ const deleteRole = () => {
     });
 };
 //delete employee fn
-const deleteEmployee = () =>{
+const deleteEmployee = () => {
+    const sqlEmployee = `SELECT * FROM employees`;
 
-}
+    db.query(sqlEmployee, (err, rows) => {
+        if (err) throw error;
+
+        const employeeArray = rows.map(({ id, first_name, last_name }) => ({
+            name: first_name + " " + last_name,
+            value: id,
+        }));
+        inquirer
+            .prompt([
+                {
+                    type: "list",
+                    name: "employee",
+                    message: "Which employee would you like to delete?",
+                    choices: employeeArray,
+                },
+            ])
+            .then((answer) => {
+                const employee = answer.employee;
+                const sql = `DELETE FROM employees WHERE id = ?`;
+
+                db.query(sql, employee, (err, rows) => {
+                    if (err) throw err;
+                    console.log("The employee was deleted succesfully.");
+                    promptAction();
+                });
+            });
+    });
+};
+
+//combined budget fn
+const viewCombinedSalariesByDepartment = () => {
+    const sql = `SELECT department_id AS id, 
+                      departments.department_name,
+                      SUM(salary) AS budget
+               FROM  roles 
+               JOIN departments ON roles.department_id = departments.id GROUP BY  department_id`;
+
+    db.query(sql, (err, rows) => {
+        if (err) throw err;
+        console.table(rows);
+        promptAction();
+    });
+};
