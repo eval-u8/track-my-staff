@@ -524,9 +524,37 @@ const deleteDepartment = () =>{
     })
 }
 //delete role fn
-const deleteRole = () =>{
+const deleteRole = () => {
+    const sqlRole = `SELECT * FROM roles`;
 
-}
+    db.query(sqlRole, (err, rows) => {
+        if (err) throw error;
+
+        const rolesArray = rows.map(({ title, id }) => ({
+            name: title,
+            value: id,
+        }));
+        inquirer
+            .prompt([
+                {
+                    type: "list",
+                    name: "role",
+                    message: "Which department would you like to delete?",
+                    choices: rolesArray,
+                },
+            ])
+            .then((answer) => {
+                const role = answer.role;
+                const sql = `DELETE FROM roles WHERE id = ?`;
+
+                db.query(sql, role, (err, rows) => {
+                    if (err) throw err;
+                    console.log("The role was deleted succesfully.");
+                    promptAction();
+                });
+            });
+    });
+};
 //delete employee fn
 const deleteEmployee = () =>{
 
