@@ -490,3 +490,44 @@ const updateEmployeeManager = () => {
             });
     });
 };
+
+//don't know what they mean by sort by dpt or manager so won't do it.
+
+//delete department fn
+const deleteDepartment = () =>{
+    const sqlDepartment = `SELECT * FROM departments`;
+
+    db.query(sqlDepartment, (err, rows) => {
+        if(err)throw error;
+
+        const departmentArr = rows.map(({ department_name, id }) => ({
+            name: department_name,
+            value: id,
+        }));
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'department',
+                message: "Which department would you like to delete?",
+                choices: departmentArr
+            }
+        ]).then(answer => {
+            const department = answer.department;
+            const sql = `DELETE FROM departments WHERE id = ?`;
+
+            db.query(sql, department, (err, rows) => {
+                if(err)throw err;
+                console.log("The department was deleted succesfully.");
+                promptAction();
+            })
+        })
+    })
+}
+//delete role fn
+const deleteRole = () =>{
+
+}
+//delete employee fn
+const deleteEmployee = () =>{
+
+}
