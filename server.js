@@ -97,7 +97,9 @@ const viewAllDepartments = () => {
 
     db.query(sql, (err, rows) => {
         if (err) throw error;
+        console.log('====================');
         console.log('Departments');
+        console.log('====================');
         console.table(rows);
         promptAction();
     });
@@ -111,7 +113,9 @@ const viewAllRoles = () => {
 
     db.query(sql, (err, rows) => {
         if (err) throw error;
-        console.log('Roles');
+        console.log("====================");
+        console.log("Roles");
+        console.log("====================");
         console.table(rows);
         promptAction();
     });
