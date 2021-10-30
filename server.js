@@ -143,3 +143,29 @@ const viewAllEmployees = () => {
         promptAction();
     });
 };
+
+//add department
+const addDepartment = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name : 'newDepartment',
+            message: "Enter new department's name: ",
+            validate: (text) => {
+                if (text) {
+                    return true;
+                } else {
+                    console.log('Please enter the name of the new department to proceed.');
+                    return false;
+                }
+            }
+        }
+    ]).then((answer) => {
+        const sql = `INSERT INTO departments (department_name) values (?)`;
+        db.query(sql, answer.newDepartment, (err, rows) => {
+            if (err) throw error;
+            console.log(`${answer.newDepartment} was succesfully added to the Departments Database!`);
+            promptAction();
+        })
+    });
+};
