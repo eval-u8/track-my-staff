@@ -93,13 +93,26 @@ const promptAction = () => {
 
 //view all departments fn
 const viewAllDepartments = () => {
-    const sql = `SELECT departments.id AS id, departments.department_name AS department FROM departments`;
+    const sql = `SELECT departments.id, departments.department_name FROM departments`;
 
     db.query(sql, (err, rows) => {
         if (err) throw error;
         console.log('Departments');
         console.table(rows);
-        // cTable(rows);
+        promptAction();
+    });
+};
+
+//view all roles fn
+const viewAllRoles = () => {
+    const sql = `SELECT roles.id, roles.title, departments.department_name, roles.salary
+    FROM roles
+    INNER JOIN departments ON roles.department_id = departments.id`;
+
+    db.query(sql, (err, rows) => {
+        if (err) throw error;
+        console.log('Departments');
+        console.table(rows);
         promptAction();
     });
 };
