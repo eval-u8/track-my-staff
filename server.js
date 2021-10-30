@@ -120,3 +120,26 @@ const viewAllRoles = () => {
         promptAction();
     });
 };
+
+//view all employees fn
+const viewAllEmployees = () => {
+    const sql = `SELECT employees.id, 
+                  employees.first_name, 
+                  employees.last_name, 
+                  roles.title, 
+                  departments.department_name, 
+                  roles.salary
+                  FROM employees, roles, departments 
+                  WHERE departments.id = roles.department_id 
+                  AND roles.id = employees.role_id`;
+                  //fix manager here
+
+    db.query(sql, (err, rows) => {
+        if (err) throw error;
+        console.log("====================");
+        console.log("Employees");
+        console.log("====================");
+        console.table(rows);
+        promptAction();
+    });
+};
