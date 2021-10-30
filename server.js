@@ -12,6 +12,7 @@ db.connect(err => {
             return;
         }
     console.log(data)
+    promptAction();
     });
 });
 
@@ -90,3 +91,13 @@ const promptAction = () => {
 //functions for each actions
 
 //view all departments fn
+const viewAllDepartments = () => {
+    const sql = `SELECT departments.id AS id, departments.department_name AS department FROM departments`;
+
+    db.query(sql, (err, rows) => {
+        if (err) throw error;
+        console.log('Departments');
+        console.log(rows)
+        promptAction();
+    });
+};
