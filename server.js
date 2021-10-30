@@ -132,7 +132,7 @@ const viewAllEmployees = () => {
                   FROM employees, roles, departments 
                   WHERE departments.id = roles.department_id 
                   AND roles.id = employees.role_id`;
-                  //fix manager here
+                  //fix manager here!!!
 
     db.query(sql, (err, rows) => {
         if (err) throw error;
