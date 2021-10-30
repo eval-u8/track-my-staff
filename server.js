@@ -1,6 +1,7 @@
 const db = require('./db/connection');
 const figlet = require('figlet');
 const inquirer = require('inquirer');
+// const cTable = require('console.table');
 
 //welcome figlet
 db.connect(err => {
@@ -97,7 +98,8 @@ const viewAllDepartments = () => {
     db.query(sql, (err, rows) => {
         if (err) throw error;
         console.log('Departments');
-        console.log(rows)
+        console.table(rows);
+        // cTable(rows);
         promptAction();
     });
 };
