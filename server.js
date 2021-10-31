@@ -1,8 +1,7 @@
 const db = require("./db/connection");
 const figlet = require("figlet");
 const inquirer = require("inquirer");
-const { listenerCount } = require("./db/connection");
-// const cTable = require('console.table');
+const cTable = require("console.table");
 
 //welcome figlet
 db.connect((err) => {
@@ -35,8 +34,8 @@ const promptAction = () => {
                     "Add An Employee",
                     "Update An Employee's Role",
                     "Update An Employee's Manager",
-                    "View Employees By Manager",
-                    "View Employees By Department",
+                    // "View Employees By Manager",
+                    // "View Employees By Department",
                     "Delete Department",
                     "Delete Role",
                     "Delete Employee",
@@ -70,12 +69,12 @@ const promptAction = () => {
             if (actionAnswers.actions === "Update An Employee's Manager") {
                 updateEmployeeManager();
             }
-            if (actionAnswers.actions === "View Employees By Manager") {
-                viewEmployeeByManager();
-            }
-            if (actionAnswers.actions === "View Employees By Department") {
-                viewEmployeeByDepartment();
-            }
+            // if (actionAnswers.actions === "View Employees By Manager") {
+            //     viewEmployeeByManager();
+            // }
+            // if (actionAnswers.actions === "View Employees By Department") {
+            //     viewEmployeeByDepartment();
+            // }
             if (actionAnswers.actions === "Delete Department") {
                 deleteDepartment();
             }
@@ -131,15 +130,15 @@ const viewAllRoles = () => {
 //view all employees fn
 const viewAllEmployees = () => {
     const sql = `SELECT employees.id, 
-                  employees.first_name, 
-                  employees.last_name, 
-                  roles.title, 
-                  departments.department_name, 
-                  roles.salary,
-                  employees.manager_id
-                  FROM employees, roles, departments 
-                  WHERE departments.id = roles.department_id 
-                  AND roles.id = employees.role_id`;
+                    employees.first_name, 
+                    employees.last_name, 
+                    roles.title, 
+                    departments.department_name, 
+                    roles.salary,
+                    employees.manager_id
+                    FROM employees, roles, departments 
+                    WHERE departments.id = roles.department_id 
+                    AND roles.id = employees.role_id`;
     //fix manager here!!!
 
     db.query(sql, (err, rows) => {
@@ -593,10 +592,10 @@ const deleteEmployee = () => {
 //combined budget fn
 const viewCombinedSalariesByDepartment = () => {
     const sql = `SELECT department_id AS id, 
-                      departments.department_name,
-                      SUM(salary) AS budget
-               FROM  roles 
-               JOIN departments ON roles.department_id = departments.id GROUP BY  department_id`;
+                departments.department_name,
+                SUM(salary) AS budget
+                FROM  roles 
+                JOIN departments ON roles.department_id = departments.id GROUP BY  department_id`;
 
     db.query(sql, (err, rows) => {
         if (err) throw err;
