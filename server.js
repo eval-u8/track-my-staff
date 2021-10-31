@@ -323,7 +323,7 @@ const addEmployee = () => {
                                 })
                             );
 
-                            console.log(managers);
+                            // console.log(managers);
 
                             inquirer
                                 .prompt([
@@ -391,7 +391,7 @@ const updateEmployeeRole = () => {
                         name: title,
                         value: id,
                     }));
-                    console.log(rolesList);
+                    // console.log(rolesList);
                     inquirer
                         .prompt([
                             {
@@ -457,7 +457,7 @@ const updateEmployeeManager = () => {
                             value: id,
                         })
                     );
-                    console.log(managerList);
+                    // console.log(managerList);
                     inquirer
                         .prompt([
                             {

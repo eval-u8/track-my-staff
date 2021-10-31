@@ -20,7 +20,7 @@ As a bonus, there is a table that shows the total budget of the departments.
 
 ## Preview 👀 
 
-![Live DEMO](dev-asset/lnt-preview-home.png)
+![CLICK HERE for Live DEMO](https://www.youtube.com/watch?v=Xa6LbZVpcDA)
 
 
 
